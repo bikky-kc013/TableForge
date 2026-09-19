@@ -12,8 +12,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5"
-	"github.com/phppgadmin/phppgadmin-go/internal/dump"
-	"github.com/phppgadmin/phppgadmin-go/internal/pgcatalog"
+	"github.com/bikky-kc013/TableForge/internal/dump"
+	"github.com/bikky-kc013/TableForge/internal/pgcatalog"
 )
 
 func (s *Server) handleDatabasesPage(w http.ResponseWriter, r *http.Request) {

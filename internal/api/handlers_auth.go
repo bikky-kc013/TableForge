@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/phppgadmin/phppgadmin-go/internal/auth"
+	"github.com/bikky-kc013/TableForge/internal/auth"
 )
 
 func (s *Server) handleRoot(w http.ResponseWriter, r *http.Request) {

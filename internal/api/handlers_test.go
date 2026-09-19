@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/phppgadmin/phppgadmin-go/internal/auth"
-	"github.com/phppgadmin/phppgadmin-go/internal/config"
-	"github.com/phppgadmin/phppgadmin-go/internal/db"
+	"github.com/bikky-kc013/TableForge/internal/auth"
+	"github.com/bikky-kc013/TableForge/internal/config"
+	"github.com/bikky-kc013/TableForge/internal/db"
 )
 
 func newTestServer(t *testing.T) *Server {

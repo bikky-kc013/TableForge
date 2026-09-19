@@ -4,11 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/bikky-kc013/TableForge/internal/model"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/model"
 )
 
-// ListPrivileges mirrors phpPgAdmin's privileges.php — queries information_schema or pg_catalog.
 func ListPrivileges(ctx context.Context, pool *pgxpool.Pool, schema, table string) ([]model.Privilege, error) {
 	q := `
 SELECT grantor, grantee, privilege_type, is_grantable

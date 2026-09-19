@@ -8,7 +8,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/config"
+	"github.com/bikky-kc013/TableForge/internal/config"
 )
 
 // Conn wraps a pgxpool.Pool tied to a specific (server, database, user) tuple

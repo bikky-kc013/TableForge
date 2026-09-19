@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/model"
+	"github.com/bikky-kc013/TableForge/internal/model"
 )
 
 // ListDatabases — single canonical query, stable across PG versions 8+.

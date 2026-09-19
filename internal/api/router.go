@@ -9,9 +9,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/phppgadmin/phppgadmin-go/internal/auth"
-	"github.com/phppgadmin/phppgadmin-go/internal/config"
-	"github.com/phppgadmin/phppgadmin-go/internal/db"
+	"github.com/bikky-kc013/TableForge/internal/auth"
+	"github.com/bikky-kc013/TableForge/internal/config"
+	"github.com/bikky-kc013/TableForge/internal/db"
 )
 
 //go:embed templates/*.html

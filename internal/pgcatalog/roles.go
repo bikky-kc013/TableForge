@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/model"
+	"github.com/bikky-kc013/TableForge/internal/model"
 )
 
 func ListRoles(ctx context.Context, pool *pgxpool.Pool) ([]model.Role, error) {

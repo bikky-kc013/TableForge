@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/model"
+	"github.com/bikky-kc013/TableForge/internal/model"
 )
 
 func ListColumns(ctx context.Context, pool *pgxpool.Pool, schema, table string) ([]model.Column, error) {

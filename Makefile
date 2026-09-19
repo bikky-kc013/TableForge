@@ -1,10 +1,10 @@
 .PHONY: build run test vet lint docker clean
 
-BIN := pgadmin-go
+BIN := tableforge
 PKG := ./...
 
 build:
-	go build -o bin/$(BIN) ./cmd/pgadmin-server
+	go build -o bin/$(BIN) ./cmd/server
 
 run: build
 	./bin/$(BIN) -config config/config.yaml
@@ -20,10 +20,10 @@ lint:
 	golangci-lint run ./... || true
 
 docker:
-	docker build -t pgadmin-go:latest .
+	docker build -t tableforge:latest .
 
 clean:
-	rm -rf bin/ coverage.out /tmp/pgadmin-go
+	rm -rf bin/ coverage.out /tmp/tableforge
 
 # Integration against ephemeral PG (requires Docker)
 integration:

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/model"
+	"github.com/bikky-kc013/TableForge/internal/model"
 )
 
 func ListViews(ctx context.Context, pool *pgxpool.Pool, schema string) ([]model.View, error) {

@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/model"
+	"github.com/bikky-kc013/TableForge/internal/model"
 )
 
 // BrowsePage fetches paginated table data with optional sort/filter.

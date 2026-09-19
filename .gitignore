@@ -16,8 +16,6 @@ config.yaml
 # OS
 .DS_Store
 
-# Legacy phpPgAdmin (removed)
-# kept for reference: all php files removed
 
 # Test data
 /tmp/

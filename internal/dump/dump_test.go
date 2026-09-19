@@ -3,7 +3,7 @@ package dump
 import (
 	"testing"
 
-	"github.com/phppgadmin/phppgadmin-go/internal/config"
+	"github.com/bikky-kc013/TableForge/internal/config"
 )
 
 func TestBuildArgsBasic(t *testing.T) {

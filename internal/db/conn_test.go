@@ -3,7 +3,7 @@ package db
 import (
 	"testing"
 
-	"github.com/phppgadmin/phppgadmin-go/internal/config"
+	"github.com/bikky-kc013/TableForge/internal/config"
 )
 
 func TestBuildDSN(t *testing.T) {

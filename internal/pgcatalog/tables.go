@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/model"
+	"github.com/bikky-kc013/TableForge/internal/model"
 )
 
 // ListTables — canonical pg_catalog query; relkind 'r' regular, 'p' partitioned (PG10+), 'f' foreign, 'm' matview.

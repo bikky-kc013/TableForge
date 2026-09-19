@@ -1,4 +1,4 @@
-module github.com/phppgadmin/phppgadmin-go
+module github.com/bikky-kc013/TableForge
 
 go 1.26.3
 

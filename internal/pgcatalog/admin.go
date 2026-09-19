@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phppgadmin/phppgadmin-go/internal/db"
+	"github.com/bikky-kc013/TableForge/internal/db"
 )
 
 // Admin operations: VACUUM/ANALYZE/CLUSTER/REINDEX, variable listing.

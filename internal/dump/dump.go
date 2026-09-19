@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/phppgadmin/phppgadmin-go/internal/config"
+	"github.com/bikky-kc013/TableForge/internal/config"
 )
 
 // Options mirrors phpPgAdmin's dbexport.php / dataexport.php controls.
