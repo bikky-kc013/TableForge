@@ -14,27 +14,27 @@
 
 ---
 
-## Why TableForge?
+## TableForge
 
 **TableForge** (`github.com/bikky-kc013/TableForge`) is a clean Go port of [phpPgAdmin](https://github.com/phppgadmin/phppgadmin). It keeps the familiar server-rendered workflow (`html/template`, no SPA build) but adds modern security, a single static binary, and a consistent UI — every table page always shows the same 8 tabs, never 404s.
 
-> `phpPgAdmin` files at the repo root are kept as a functional spec. TableForge is *not* a line-by-line port; it rebuilds the feature set with idiomatic Go, `pgx` and `chi`.
+> `phpPgAdmin` files at the repo root are kept as a functional spec. TableForge is _not_ a line-by-line port; it rebuilds the feature set with idiomatic Go, `pgx` and `chi`.
 
 ## ✨ Features
 
-| Area | What you get |
-|------|--------------|
-| **Browse** | Paginated grid (30 rows/page), sort, filter, bulk select, edit/copy/delete |
-| **Structure** | Columns, indexes, constraints, triggers — one `pg_catalog` query per object |
-| **SQL** | Ad-hoc runner + `EXPLAIN` / `EXPLAIN ANALYZE` |
-| **Search** | Column `contains` / `=` (`ILIKE`), paginated results |
-| **Insert** | Per-column form, `NOT NULL` markers, `DEFAULT` placeholders; skips `id` auto-increment |
-| **Export** | **CSV** `GET /export/csv?database=&schema=&table=` (`COPY` → `text/csv`), **JSON** `GET /api/browse`, **SQL** `GET /export/sql?database=&schema=&table=&format=plain\|custom` (`pg_dump`) |
-| **Import** | `POST /import/csv` multipart CSV → validated `INSERT` |
-| **Operations** | `VACUUM` / `REINDEX` + live `pg_settings` |
-| **Admin** | Roles, Tablespaces, Activity (`pg_stat_activity`), Variables |
-| **Consistent UI** | Topbar (`TableForge 1.0.0`), explorer sidebar, trail `db.schema.table`, always `Browse / Structure / SQL / Search / Insert / Export / Import / Operations` with fallback URLs |
-| **Errors** | Unified `model.ErrorResponse` (JSON) + `error.html` (HTML) with `RequestID`, 404 page |
+| Area              | What you get                                                                                                                                                                              |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Browse**        | Paginated grid (30 rows/page), sort, filter, bulk select, edit/copy/delete                                                                                                                |
+| **Structure**     | Columns, indexes, constraints, triggers — one `pg_catalog` query per object                                                                                                               |
+| **SQL**           | Ad-hoc runner + `EXPLAIN` / `EXPLAIN ANALYZE`                                                                                                                                             |
+| **Search**        | Column `contains` / `=` (`ILIKE`), paginated results                                                                                                                                      |
+| **Insert**        | Per-column form, `NOT NULL` markers, `DEFAULT` placeholders; skips `id` auto-increment                                                                                                    |
+| **Export**        | **CSV** `GET /export/csv?database=&schema=&table=` (`COPY` → `text/csv`), **JSON** `GET /api/browse`, **SQL** `GET /export/sql?database=&schema=&table=&format=plain\|custom` (`pg_dump`) |
+| **Import**        | `POST /import/csv` multipart CSV → validated `INSERT`                                                                                                                                     |
+| **Operations**    | `VACUUM` / `REINDEX` + live `pg_settings`                                                                                                                                                 |
+| **Admin**         | Roles, Tablespaces, Activity (`pg_stat_activity`), Variables                                                                                                                              |
+| **Consistent UI** | Topbar (`TableForge 1.0.0`), explorer sidebar, trail `db.schema.table`, always `Browse / Structure / SQL / Search / Insert / Export / Import / Operations` with fallback URLs             |
+| **Errors**        | Unified `model.ErrorResponse` (JSON) + `error.html` (HTML) with `RequestID`, 404 page                                                                                                     |
 
 ## Quick Start
 
@@ -68,7 +68,7 @@ servers:
 
 server:
   listen: ':8080'
-  session_key: ''   # random per-boot if empty
+  session_key: '' # random per-boot if empty
 
 theme: 'default'
 max_rows: 30
@@ -79,14 +79,14 @@ extra_login_security: false
 
 `config/config.yaml` replaces `conf/config.inc.php`. See `internal/config/config.go:Validate()`.
 
-| Key | Default | Notes |
-|-----|---------|-------|
-| `servers[].host` | `""` (socket) | `sslmode: disable|allow|prefer|require|verify-ca|verify-full` |
+| Key                      | Default            | Notes                                                    |
+| ------------------------ | ------------------ | -------------------------------------------------------- | ----- | ------ | ------- | --------- | ------------ |
+| `servers[].host`         | `""` (socket)      | `sslmode: disable                                        | allow | prefer | require | verify-ca | verify-full` |
 | `servers[].pg_dump_path` | `/usr/bin/pg_dump` | Must be absolute; if missing `/export/sql` returns `501` |
-| `theme` | `default` | `themes/default/global.css` + Bootstrap 5.3 |
-| `max_rows` / `max_chars` | `30` / `50` | Pagination |
-| `server.session_key` | random | 32-byte hex for multi-instance |
-| `log_level` | `info` | `debug|info|warn|error` |
+| `theme`                  | `default`          | `themes/default/global.css` + Bootstrap 5.3              |
+| `max_rows` / `max_chars` | `30` / `50`        | Pagination                                               |
+| `server.session_key`     | random             | 32-byte hex for multi-instance                           |
+| `log_level`              | `info`             | `debug                                                   | info  | warn   | error`  |
 
 ## Usage
 
@@ -121,7 +121,13 @@ internal/api/templates/     embedded for single binary
 All `/api/*` require auth cookie; errors are `model.ErrorResponse`:
 
 ```json
-{"code":404,"error":"Not Found","message":"The page you requested could not be found.","details":"Path: /x","request_id":"abc123"}
+{
+  "code": 404,
+  "error": "Not Found",
+  "message": "The page you requested could not be found.",
+  "details": "Path: /x",
+  "request_id": "abc123"
+}
 ```
 
 ```
@@ -176,4 +182,4 @@ GPL-2.0+ — same as phpPgAdmin. See [`LICENSE`](LICENSE).
 - Original [phpPgAdmin](https://github.com/phppgadmin/phppgadmin) authors
 - [`jackc/pgx`](https://github.com/jackc/pgx), [`go-chi/chi`](https://github.com/go-chi/chi), Bootstrap & Bootstrap Icons
 
-> **TableForge** — *Forge your tables, not your patience.*
+> **TableForge** — _Forge your tables, not your patience._
