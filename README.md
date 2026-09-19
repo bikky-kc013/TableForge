@@ -16,7 +16,7 @@
 
 ## TableForge
 
-**TableForge** (`github.com/bikky-kc013/TableForge`) is a clean Go port of [phpPgAdmin](https://github.com/phppgadmin/phppgadmin). It keeps the familiar server-rendered workflow (`html/template`, no SPA build) but adds modern security, a single static binary, and a consistent UI — every table page always shows the same 8 tabs, never 404s.
+**TableForge** (`github.com/bikky-kc013/TableForge`) is a clean Go port of [phpPgAdmin](https://github.com/phppgadmin/phppgadmin). It keeps the familiar server-rendered workflow (`html/template`, no SPA build) but adds modern security, a single static binary, and a consistent UI.
 
 > `phpPgAdmin` files at the repo root are kept as a functional spec. TableForge is _not_ a line-by-line port; it rebuilds the feature set with idiomatic Go, `pgx` and `chi`.
 
