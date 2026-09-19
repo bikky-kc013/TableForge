@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/themes/global.css" type="text/css" />
+<link rel="stylesheet" href="/themes/{{.Theme}}/global.css" type="text/css" id="csstheme" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+<title>{{.AppName}} - {{if .Title}}{{.Title}}{{else}}Error{{end}}</title>
+</head>
+<body>
+<div class="topbar"><table style="width:100%"><tr><td>
+<a href="/servers" style="color:#fff; font-weight:700"><i class="bi bi-database"></i> {{.AppName}}</a> <span style="opacity:0.9; font-size:11px">{{.AppVersion}}</span>
+{{if .Session}}<span style="margin-left:12px"><i class="bi bi-server"></i> {{.ServerDesc}}:{{.ServerPort}} &mdash; <i class="bi bi-person"></i> {{.Session.Username}}</span>{{end}}
+</td><td style="text-align:right">
+<div class="btn-group btn-group-sm">
+<a href="/servers" class="btn btn-light btn-sm"><i class="bi bi-hdd-stack"></i> Servers</a>
+<a href="/databases" class="btn btn-light btn-sm"><i class="bi bi-collection"></i> Databases</a>
+<a href="/sql{{if .Database}}?database={{.Database}}{{end}}" class="btn btn-light btn-sm"><i class="bi bi-code-square"></i> SQL</a>
+<a href="/logout" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i> Log out</a>
+</div>
+<form method="get" style="display:inline; margin-left:8px">
+<select name="theme" onchange="this.form.submit()" class="form-select form-select-sm" style="display:inline-block; width:auto; font-size:12px; padding:2px 6px">
+{{range .AvailableThemes}}<option value="{{.}}" {{if eq . $.Theme}}selected{{end}}>{{.}}</option>{{end}}
+</select>
+{{if .Database}}<input type="hidden" name="database" value="{{.Database}}" />{{end}}
+{{if .Schema}}<input type="hidden" name="schema" value="{{.Schema}}" />{{end}}
+</form>
+</td></tr></table></div>
+<div class="trail" style="padding:4px 12px; font-size:11px; color:#6c757d; background:#fff; border-bottom:1px solid #dee2e6">
+{{if .Database}}{{if .Schema}}{{.Schema}}.{{if .Table}}{{.Table}}{{else}}tables{{end}}{{else}}{{.Database}}{{end}}{{else}}Home{{end}} &raquo; Error
+</div>
+<div class="pma-wrapper">
+<div class="pma-sidebar">
+<div style="padding:8px; background:#f8f9fa; border-bottom:1px solid #dee2e6; display:flex; justify-content:space-between; align-items:center">
+<strong style="font-size:13px"><i class="bi bi-diagram-3"></i> Explorer</strong>
+<a href="/databases" class="btn btn-sm btn-outline-primary" title="Refresh"><i class="bi bi-arrow-clockwise"></i></a>
+</div>
+<ul style="list-style:none; margin:0; padding:0">
+<li style="padding:6px 8px; background:#e5f0f9; border-bottom:1px solid #dee2e6; font-weight:600; font-size:12px"><i class="bi bi-server"></i> {{.ServerDesc}} ({{.ServerPort}})</li>
+<li><a href="/databases" style="display:block; padding:6px 8px; color:#377CB0; font-weight:600"><i class="bi bi-collection"></i> Databases</a></li>
+{{if .SidebarDatabases}}
+{{range .SidebarDatabases}}
+<li>
+<details {{if eq .Name $.Database}}open{{end}} style="border-bottom:1px solid #f0f0f0">
+<summary style="padding:5px 8px; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between">
+<span><i class="bi bi-database"></i> {{.Name}} {{if eq .Name $.Database}}<span class="badge bg-primary" style="font-size:10px">active</span>{{end}}</span>
+<span style="font-size:11px; color:#666">{{.Owner}}</span>
+</summary>
+<div style="padding:4px 0 4px 16px; background:#fcfcfc">
+<a href="/schemas?database={{.Name}}" style="display:block; padding:3px 8px; font-size:12px; color:#555"><i class="bi bi-folder"></i> Open database</a>
+{{if eq .Name $.Database}}
+{{if $.SidebarSchemas}}
+{{range $.SidebarSchemas}}
+<div style="padding:2px 8px; font-size:12px; color:#333"><i class="bi bi-diagram-3"></i> {{.Name}}</div>
+{{end}}
+{{end}}
+{{if $.SidebarTables}}
+<div style="margin-top:4px; padding-left:8px">
+{{range $.SidebarTables}}
+<a href="/table/{{.Name}}?schema={{$.SidebarSchema}}&database={{$.Database}}" style="display:block; padding:2px 4px; font-size:12px; color:#333; text-decoration:none; border-left:2px solid {{if eq .Name $.Table}}#377CB0{{else}}transparent{{end}}; background:{{if eq .Name $.Table}}#e5f0f9{{else}}transparent{{end}}"><i class="bi bi-table"></i> {{.Name}}</a>
+{{end}}
+</div>
+{{end}}
+{{end}}
+</div>
+</details>
+</li>
+{{end}}
+{{else}}
+<li style="padding:8px; color:#888; font-size:12px"><i class="bi bi-exclamation-circle"></i> No databases or not connected</li>
+{{end}}
+</ul>
+<div style="padding:8px; border-top:1px solid #dee2e6; margin-top:8px">
+<small class="text-muted">Theme</small>
+<form method="get" style="margin-top:4px">
+<select name="theme" onchange="this.form.submit()" class="form-select form-select-sm">
+{{range .AvailableThemes}}<option value="{{.}}" {{if eq . $.Theme}}selected{{end}}>{{.}}</option>{{end}}
+</select>
+</form>
+</div>
+<div class="pma-sidebar-filter"><input type="text" id="treeFilter" placeholder="Filter" onkeyup="filterTree(this.value)" /></div>
+</div>
+<div class="pma-main">
+<div style="max-width:720px; margin:24px auto;">
+<div class="card shadow-sm" style="border-top: 4px solid {{if eq .Status 404}}#ffc107{{else if eq .Status 403}}#fd7e14{{else if eq .Status 401}}#0d6efd{{else}}#dc3545{{end}};">
+<div class="card-body p-4">
+<div style="display:flex; gap:16px; align-items:flex-start;">
+<div style="flex-shrink:0; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:{{if eq .Status 404}}#fff3cd{{else if eq .Status 403}}#ffe5d0{{else if eq .Status 401}}#cfe2ff{{else}}#f8d7da{{end}}; color:{{if eq .Status 404}}#856404{{else if eq .Status 403}}#7a3e00{{else if eq .Status 401}}#084298{{else}}#842029{{end}}; font-size:28px;">
+{{if eq .Status 404}}<i class="bi bi-search"></i>
+{{else if eq .Status 403}}<i class="bi bi-shield-lock"></i>
+{{else if eq .Status 401}}<i class="bi bi-person-x"></i>
+{{else if eq .Status 400}}<i class="bi bi-exclamation-triangle"></i>
+{{else}}<i class="bi bi-bug"></i>{{end}}
+</div>
+<div style="flex:1;">
+<div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+<span style="font-size:42px; font-weight:800; line-height:1; color:#212529">{{.Status}}</span>
+<span style="font-size:20px; font-weight:600; color:#495057">{{if .Title}}{{.Title}}{{else}}{{if eq .Status 404}}Not Found{{else if eq .Status 403}}Forbidden{{else if eq .Status 401}}Unauthorized{{else if eq .Status 400}}Bad Request{{else}}Error{{end}}{{end}}</span>
+</div>
+{{if .RequestID}}<div style="margin-top:4px; font-size:11px; color:#6c757d;">Request ID: <code style="background:#f8f9fa; padding:1px 5px; border-radius:3px;">{{.RequestID}}</code></div>{{end}}
+<p style="margin-top:12px; font-size:14px; color:#212529; white-space:pre-wrap;">{{if .Message}}{{.Message}}{{else}}Something went wrong while processing your request.{{end}}</p>
+{{if .Details}}
+<details style="margin-top:12px; background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:8px 10px;">
+<summary style="cursor:pointer; font-size:12px; font-weight:600; color:#495057;">Technical details</summary>
+<pre style="margin:8px 0 0 0; white-space:pre-wrap; word-break:break-word; font-size:11px; color:#212529; background:#fff; padding:8px; border:1px solid #e9ecef; border-radius:3px;">{{.Details}}</pre>
+</details>
+{{end}}
+<div style="margin-top:18px; display:flex; gap:8px; flex-wrap:wrap;">
+<a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Go Back</a>
+<a href="/databases{{if .Database}}?database={{.Database}}{{end}}" class="btn btn-primary btn-sm"><i class="bi bi-collection"></i> Databases</a>
+<a href="/" class="btn btn-outline-primary btn-sm"><i class="bi bi-house"></i> Home</a>
+{{if .ShowLogin}}<a href="/login" class="btn btn-warning btn-sm"><i class="bi bi-box-arrow-in-right"></i> Log In</a>{{end}}
+</div>
+{{if eq .Status 404}}
+<div style="margin-top:20px; padding-top:14px; border-top:1px solid #e9ecef;">
+<p style="font-size:12px; font-weight:600; margin:0 0 8px 0; color:#495057;"><i class="bi bi-lightbulb"></i> Common fixes</p>
+<ul style="font-size:12px; color:#6c757d; margin:0; padding-left:18px;">
+<li>Check the URL for typos — table and schema names are case-sensitive.</li>
+<li>Make sure <code>database</code> query parameter is present (e.g. <code>?database=mydb</code>).</li>
+<li>Use the Explorer on the left to navigate to a known database / schema.</li>
+</ul>
+</div>
+{{end}}
+</div>
+</div>
+</div>
+</div>
+{{if .Status}}
+<div style="text-align:center; margin-top:12px; font-size:11px; color:#adb5bd;">
+{{.AppName}} • Error {{.Status}} • {{.Title}}
+{{if .RequestID}} • {{.RequestID}}{{end}}
+</div>
+{{end}}
+</div>
+</div>
+</div>
+<a href="#" class="bottom_link" style="position:fixed; bottom:10px; right:10px; background:#fff; border:1px solid #ddd; padding:4px 8px; border-radius:3px; font-size:12px"><i class="bi bi-arrow-up"></i> Top</a>
+<script>function filterTree(v){ document.querySelectorAll(".pma-tree details").forEach(d=>{ const txt=d.textContent.toLowerCase(); d.style.display = txt.includes(v.toLowerCase()) ? "" : "none";});}</script>
+</body>
+</html>

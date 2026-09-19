@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{block "title" .}}TableForge{{end}}</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+<nav class="navbar">
+  <a href="/servers">Servers</a> |
+  <a href="/databases">Databases</a> |
+  <a href="/schemas">Schemas</a> |
+  <a href="/tables?schema=public">Tables</a> |
+  <a href="/sql">SQL</a> |
+  <a href="/roles">Roles</a> |
+  <a href="/admin">Admin</a> |
+  <a href="/logout">Logout</a>
+</nav>
+<main class="container">
+{{block "content" .}}{{end}}
+</main>
+<footer><small>TableForge • Modern PostgreSQL administration — PG credentials stay server-side, encrypted with secretbox</small></footer>
+</body>
+</html>

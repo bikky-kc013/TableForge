@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/themes/global.css" type="text/css" />
+<link rel="stylesheet" href="/themes/{{.Theme}}/global.css" type="text/css" id="csstheme" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+<title>{{.AppName}} - Search {{.Table}}</title>
+</head>
+<body>
+<div class="topbar"><table style="width:100%"><tr><td>
+<a href="/servers" style="color:#fff; font-weight:700"><i class="bi bi-database"></i> {{.AppName}}</a> <span style="opacity:0.9; font-size:11px">{{.AppVersion}}</span>
+{{if .Session}}<span style="margin-left:12px"><i class="bi bi-server"></i> {{.ServerDesc}}:{{.ServerPort}} &mdash; <i class="bi bi-person"></i> {{.Session.Username}}</span>{{end}}
+</td><td style="text-align:right">
+<div class="btn-group btn-group-sm">
+<a href="/servers" class="btn btn-light btn-sm"><i class="bi bi-hdd-stack"></i> Servers</a>
+<a href="/databases" class="btn btn-light btn-sm"><i class="bi bi-collection"></i> Databases</a>
+<a href="/sql{{if .Database}}?database={{.Database}}{{end}}" class="btn btn-light btn-sm"><i class="bi bi-code-square"></i> SQL</a>
+<a href="/logout" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i> Log out</a>
+</div>
+<form method="get" style="display:inline; margin-left:8px">
+<select name="theme" onchange="this.form.submit()" class="form-select form-select-sm" style="display:inline-block; width:auto; font-size:12px; padding:2px 6px">
+{{range .AvailableThemes}}<option value="{{.}}" {{if eq . $.Theme}}selected{{end}}>{{.}}</option>{{end}}
+</select>
+{{if .Database}}<input type="hidden" name="database" value="{{.Database}}" />{{end}}
+{{if .Schema}}<input type="hidden" name="schema" value="{{.Schema}}" />{{end}}
+</form>
+</td></tr></table></div>
+<div class="trail" style="padding:4px 12px; font-size:11px; color:#6c757d; background:#fff; border-bottom:1px solid #dee2e6">
+{{if .Database}}{{if .Schema}}{{.Schema}}.{{if .Table}}{{.Table}}{{else}}tables{{end}}{{else}}{{.Database}}{{end}}{{else}}Home{{end}}
+</div>
+<div class="pma-wrapper">
+<div class="pma-sidebar">
+<div style="padding:8px; background:#f8f9fa; border-bottom:1px solid #dee2e6; display:flex; justify-content:space-between; align-items:center">
+<strong style="font-size:13px"><i class="bi bi-diagram-3"></i> Explorer</strong>
+<a href="/databases" class="btn btn-sm btn-outline-primary" title="Refresh"><i class="bi bi-arrow-clockwise"></i></a>
+</div>
+<ul style="list-style:none; margin:0; padding:0">
+<li style="padding:6px 8px; background:#e5f0f9; border-bottom:1px solid #dee2e6; font-weight:600; font-size:12px"><i class="bi bi-server"></i> {{.ServerDesc}} ({{.ServerPort}})</li>
+<li><a href="/databases" style="display:block; padding:6px 8px; color:#377CB0; font-weight:600"><i class="bi bi-collection"></i> Databases</a></li>
+{{if .SidebarDatabases}}
+{{range .SidebarDatabases}}
+<li>
+<details {{if eq .Name $.Database}}open{{end}} style="border-bottom:1px solid #f0f0f0">
+<summary style="padding:5px 8px; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between">
+<span><i class="bi bi-database"></i> {{.Name}} {{if eq .Name $.Database}}<span class="badge bg-primary" style="font-size:10px">active</span>{{end}}</span>
+<span style="font-size:11px; color:#666">{{.Owner}}</span>
+</summary>
+<div style="padding:4px 0 4px 16px; background:#fcfcfc">
+<a href="/schemas?database={{.Name}}" style="display:block; padding:3px 8px; font-size:12px; color:#555"><i class="bi bi-folder"></i> Open database</a>
+{{if eq .Name $.Database}}
+{{if $.SidebarSchemas}}
+{{range $.SidebarSchemas}}
+<div style="padding:2px 8px; font-size:12px; color:#333"><i class="bi bi-diagram-3"></i> {{.Name}}</div>
+{{end}}
+{{end}}
+{{if $.SidebarTables}}
+<div style="margin-top:4px; padding-left:8px">
+{{range $.SidebarTables}}
+<a href="/table/{{.Name}}?schema={{$.SidebarSchema}}&database={{$.Database}}" style="display:block; padding:2px 4px; font-size:12px; color:#333; text-decoration:none; border-left:2px solid {{if eq .Name $.Table}}#377CB0{{else}}transparent{{end}}; background:{{if eq .Name $.Table}}#e5f0f9{{else}}transparent{{end}}"><i class="bi bi-table"></i> {{.Name}}</a>
+{{end}}
+</div>
+{{end}}
+{{end}}
+</div>
+</details>
+</li>
+{{end}}
+{{else}}
+<li style="padding:8px; color:#888; font-size:12px"><i class="bi bi-exclamation-circle"></i> No databases or not connected</li>
+{{end}}
+</ul>
+<div style="padding:8px; border-top:1px solid #dee2e6; margin-top:8px">
+<small class="text-muted">Theme</small>
+<form method="get" style="margin-top:4px">
+<select name="theme" onchange="this.form.submit()" class="form-select form-select-sm">
+{{range .AvailableThemes}}<option value="{{.}}" {{if eq . $.Theme}}selected{{end}}>{{.}}</option>{{end}}
+</select>
+</form>
+</div>
+<div class="pma-sidebar-filter"><input type="text" id="treeFilter" placeholder="Filter" onkeyup="filterTree(this.value)" /></div>
+</div>
+<div class="pma-main">
+<div class="page-header" style="margin-bottom:8px">
+<div>
+<h2 style="margin:0; font-size:15px"><i class="bi bi-table"></i> {{if .Table}}{{.Schema}}.{{.Table}}{{else}}{{if .Schema}}{{.Schema}}{{else}}{{.Database}}{{end}}{{end}}</h2>
+</div>
+</div>
+<ul class="nav nav-tabs mb-3" style="font-size:12px">
+<li class="nav-item"><a class="nav-link" href="{{if .Table}}/browse/{{.Schema}}/{{.Table}}?database={{.Database}}{{else}}/tables?schema={{if .Schema}}{{.Schema}}{{else}}public{{end}}&database={{.Database}}{{end}}"><i class="bi bi-card-list"></i> Browse</a></li>
+<li class="nav-item"><a class="nav-link" href="{{if .Table}}/table/{{.Table}}?schema={{.Schema}}&database={{.Database}}{{else}}/tables?schema={{if .Schema}}{{.Schema}}{{else}}public{{end}}&database={{.Database}}{{end}}"><i class="bi bi-list-columns"></i> Structure</a></li>
+<li class="nav-item"><a class="nav-link" href="/sql?database={{.Database}}{{if .Schema}}&schema={{.Schema}}{{end}}{{if .Table}}&table={{.Table}}{{end}}"><i class="bi bi-code-square"></i> SQL</a></li>
+<li class="nav-item"><a class="nav-link active"><i class="bi bi-search"></i> Search</a></li>
+<li class="nav-item"><a class="nav-link" href="{{if .Table}}/insert/{{.Schema}}/{{.Table}}?database={{.Database}}{{else}}/insert/{{if .Schema}}{{.Schema}}{{else}}public{{end}}?database={{.Database}}{{end}}"><i class="bi bi-plus"></i> Insert</a></li>
+<li class="nav-item"><a class="nav-link" {{if .Table}}href="/export/{{.Schema}}/{{.Table}}?database={{.Database}}"{{else}}href="/export?database={{.Database}}"{{end}}><i class="bi bi-download"></i> Export</a></li>
+<li class="nav-item"><a class="nav-link" {{if .Table}}href="/import/{{.Schema}}/{{.Table}}?database={{.Database}}"{{else}}href="/import?database={{.Database}}"{{end}}><i class="bi bi-upload"></i> Import</a></li>
+<li class="nav-item"><a class="nav-link" href="/admin?database={{.Database}}"><i class="bi bi-gear"></i> Operations</a></li>
+</ul>
+{{if not .Table}}
+<div class="alert alert-warning py-2"><i class="bi bi-exclamation-circle"></i> Select a table first to search. <a href="/tables?schema={{.Schema}}&database={{.Database}}">Choose table in {{.Schema}}</a></div>
+{{else}}
+<h2 style="font-size:14px"><i class="bi bi-search"></i> Search — {{.Schema}}.{{.Table}}</h2>
+<form method="POST" action="/search/{{.Schema}}/{{.Table}}?database={{.Database}}" class="card" style="padding:12px">
+<input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+<div class="row g-2 align-items-end">
+<div class="col-auto"><label class="form-label form-label-sm">Column</label><select name="col" class="form-select form-select-sm">{{range .Columns}}<option value="{{.Name}}" {{if eq .Name $.SearchCol}}selected{{end}}>{{.Name}} ({{.Type}})</option>{{end}}</select></div>
+<div class="col-auto"><label class="form-label form-label-sm">Operator</label><select name="op" class="form-select form-select-sm"><option value="contains" selected>contains</option><option value="equals">=</option></select></div>
+<div class="col-auto"><label class="form-label form-label-sm">Value</label><input type="text" name="val" value="{{.SearchVal}}" class="form-control form-control-sm" /></div>
+<div class="col-auto"><button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-search"></i> Go</button></div>
+</div>
+</form>
+{{if .Result}}
+<div style="margin-top:16px">
+<h3 style="font-size:12px">Results — {{.Result.RowCount}} rows</h3>
+<div class="table-responsive" style="border:1px solid #dee2e6; border-radius:4px">
+<table class="table table-sm table-hover mb-0">
+<thead><tr>{{range .Result.Columns}}<th class="data">{{.}}</th>{{end}}</tr></thead>
+<tbody>
+{{range .Result.Rows}}<tr>{{range .}}<td style="font-size:12px">{{.}}</td>{{end}}</tr>{{end}}
+</tbody>
+</table>
+</div>
+</div>
+{{end}}
+{{end}}
+</div>
+</div>
+<a href="#" class="bottom_link" style="position:fixed; bottom:10px; right:10px; background:#fff; border:1px solid #ddd; padding:4px 8px; border-radius:3px; font-size:12px"><i class="bi bi-arrow-up"></i> Top</a>
+<script>function filterTree(v){ document.querySelectorAll(".pma-tree details").forEach(d=>{ const txt=d.textContent.toLowerCase(); d.style.display = txt.includes(v.toLowerCase()) ? "" : "none";});}</script>
+</body>
+</html>

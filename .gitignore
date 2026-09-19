@@ -1,0 +1,23 @@
+# Go
+bin/
+coverage.out
+*.exe
+*.test
+
+# Config
+config.yaml
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+# Legacy phpPgAdmin (removed)
+# kept for reference: all php files removed
+
+# Test data
+/tmp/
